@@ -1,0 +1,834 @@
+---
+layout: null
+title: Woop AI — Woop watches the prompts that make you money
+permalink: /woop-ai/
+calendar:
+  - { name: ChatGPT,    color: "#4ba083", pct: "90%", days: "nccccccccncccccccccccncccccccc" }
+  - { name: Perplexity, color: "#2f7a8a", pct: "87%", days: "nnnccccccccccccccccccccccccxcc" }
+  - { name: Google AIO, color: "#4a7fe0", pct: "90%", days: "ccccccnccccccncccccccncccccccc" }
+  - { name: Gemini,     color: "#8a6cc4", pct: "47%", days: "nnnnnnnnnnnnnccccccccnccccccnn" }
+  - { name: AI Mode,    color: "#e08a2f", pct: "83%", days: "nnncccccccccccncccccccccccxccc" }
+  - { name: Copilot,    color: "#8a8a8a", pct: "90%", days: "cccccnccccccccccccncccnccccccc" }
+prompts:
+  - { q: "best video cv tools",        engines: "GPT · PPLX · GEM", rank: "#2", rival: "Zety",       rev: "$22,200" }
+  - { q: "how to make a video resume", engines: "GPT · AIO",        rank: "#1", rival: "—",          rev: "$13,400" }
+  - { q: "video resume maker usa",     engines: "PPLX · GEM",       rank: "#3", rival: "Canva",      rev: "$9,900" }
+  - { q: "ai resume builder free",     engines: "GPT · AIO · COP",  rank: "—",  rival: "Zety",       rev: "—" }
+  - { q: "zety alternatives",          engines: "GPT · PPLX",       rank: "#4", rival: "Rezi",       rev: "$4,670" }
+  - { q: "best resume format 2026",    engines: "AIO · GEM",        rank: "—",  rival: "Novoresume", rev: "—" }
+board:
+  - name: Draft
+    dot: "#8a8580"
+    cards:
+      - { tag: PROMPT,   est: "est. $2,550", title: "Rewrite the /pricing answer block", action: "Start work" }
+      - { tag: ACCURACY, est: "est. $1,300", title: "Fix pricing markup so AI can read prices", action: "Start work" }
+  - name: In progress
+    dot: "#c98a1e"
+    cards:
+      - { tag: SOURCE, est: "est. $1,330", title: "Get listed on capterra.com", action: "Mark shipped" }
+  - name: Shipped
+    dot: "#4a7fe0"
+    cards:
+      - { tag: PROMPT, est: "est. $1,680", title: "Draft page: best resume format 2026", action: "Verify" }
+  - name: Verified
+    dot: "#2f6f4f"
+    cards:
+      - { tag: SOURCE, est: "$1,720", title: "G2 profile refresh", recovered: "✓ $1,720 recovered" }
+tabs:
+  - { id: dashboard,   label: Dashboard,   icon: "$", url: "woop1.com/revenue" }
+  - { id: prompts,     label: Prompts,     icon: "›", url: "woop1.com/prompts" }
+  - { id: sources,     label: Sources,     icon: "∞", url: "woop1.com/sources" }
+  - { id: accuracy,    label: Accuracy,    icon: "✓", url: "woop1.com/accuracy" }
+  - { id: actions,     label: Actions,     icon: "▦", url: "woop1.com/actions" }
+  - { id: competitors, label: Competitors, icon: "×", url: "woop1.com/competitors" }
+  - { id: reports,     label: Reports,     icon: "■", url: "woop1.com/reports" }
+---
+{%- capture revenue_card -%}
+<div class="rev-card">
+  <div class="mono-label accent">AI-attributed revenue · last 30 days</div>
+  <div class="rev-total"><span class="mono">$58,400</span><span class="chip chip-up">▲ 22% vs prior 30d</span></div>
+  <div class="rev-split mono"><b>$43,000 directly tracked</b><span>$15,400 modelled</span><span class="chip chip-model">~ modelled</span></div>
+  <div class="mono-label dim">Attribution trail · top path</div>
+  <div class="trail-mini">
+    <div><small>Prompt</small><b>"best video cv tools"</b><em>23 tracked</em></div>
+    <div><small>Engine</small><b>ChatGPT</b><em>+ 5 others</em></div>
+    <div><small>Citation</small><b>g2.com/compare</b><em>14 sources</em></div>
+    <div><small>Landing</small><b>/pricing</b><em>1,240 sessions</em></div>
+    <div><small>Payment</small><b class="green">$6,700</b><em>3 deals</em></div>
+  </div>
+</div>
+{%- endcapture -%}
+{%- capture calendar -%}
+<div class="cal">
+  <div class="cal-head mono"><span>Citation calendar · 30 days</span><span class="dim">23 prompts · per engine</span></div>
+  {%- for row in page.calendar %}
+  <div class="cal-row">
+    <span class="cal-name"><i style="background:{{ row.color }}"></i>{{ row.name }}</span>
+    <span class="cal-cells">{% assign days = row.days | split: "" %}{% for d in days %}<i class="d-{{ d }}"></i>{% endfor %}</span>
+    <span class="cal-pct mono">{{ row.pct }}</span>
+  </div>
+  {%- endfor %}
+  <div class="cal-legend"><span><i class="d-c"></i>cited</span><span><i class="d-n"></i>not cited</span><span><i class="d-x"></i>no check</span></div>
+</div>
+{%- endcapture -%}
+{%- capture prompts_panel -%}
+<div class="chips"><span class="chip-f on">All</span><span class="chip-f">Earning</span><span class="chip-f">Losing</span><span class="chip-f">At risk</span></div>
+<div class="table-wrap">
+  <table class="ptable">
+    <thead><tr><th>Prompt</th><th>Engines</th><th>Rank</th><th>Competitor</th><th class="r">Revenue</th></tr></thead>
+    <tbody>
+      {%- for p in page.prompts %}
+      <tr><td>{{ p.q }}</td><td class="mono eng">{{ p.engines }}</td><td class="rank{% if p.rank == '—' %} lost{% endif %}">{{ p.rank }}</td><td class="dim">{{ p.rival }}</td><td class="mono r">{{ p.rev }}</td></tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="table-foot mono">6 of 23 prompts · revenue-weighted scheduling active</p>
+{%- endcapture -%}
+{%- capture actions_panel -%}
+<p class="board-intro">Every fix carries the revenue it should recover. Shipped work is re-checked automatically.</p>
+<div class="board">
+  {%- for col in page.board %}
+  <div class="col">
+    <div class="col-head mono"><span><i style="background:{{ col.dot }}"></i>{{ col.name }}</span><span>{{ col.cards | size }}</span></div>
+    {%- for c in col.cards %}
+    <div class="kcard">
+      <div class="kmeta mono"><span class="ktag{% if c.tag == 'SOURCE' %} grey{% endif %}">{{ c.tag }}</span><span{% if c.recovered %} class="green"{% endif %}>{{ c.est }}</span></div>
+      <div class="ktitle">{{ c.title }}</div>
+      {%- if c.recovered %}<div class="krec mono">{{ c.recovered }}</div>{% else %}<span class="kbtn">{{ c.action }}</span>{% endif %}
+    </div>
+    {%- endfor %}
+  </div>
+  {%- endfor %}
+</div>
+{%- endcapture -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <meta name="description" content="Woop schedules AI-engine checks by what each prompt earns and proves a fix worked. 150 prompts, all 6 engines daily, revenue-weighted scheduling, verified-fix attribution, 16-month backfill, API + MCP.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f5f1;
+      --paper: #ffffff;
+      --ink: #14110f;
+      --ink-2: #3d3934;
+      --muted: #7b756e;
+      --line: #e8e3dc;
+      --orange: #d9603a;
+      --orange-2: #ee7d3a;
+      --orange-tint: #fbece6;
+      --dark: #13100e;
+      --dark-2: #1f1b18;
+      --dark-line: #34302c;
+      --green: #2f6f4f;
+      --green-2: #6fcf97;
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { font-weight: 500; letter-spacing: -0.03em; margin: 0; }
+    .dash > *, .how > *, .feat > *, .diff > *, .quotes > *, .tiers > *, .trail > *, .board > *, .stat-grid > * { min-width: 0; }
+    .mono { font-family: var(--mono); }
+    .dim { color: var(--muted); }
+    .green { color: var(--green); }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .eyebrow { font-size: 15px; color: var(--muted); margin-bottom: 14px; }
+    .mono-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .mono-label.accent { color: var(--orange-2); }
+    .mono-label.dim { color: #8f8a84; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 500; padding: 15px 26px; border-radius: 999px; transition: transform .15s, box-shadow .15s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-orange { background: var(--orange); color: #fff; box-shadow: 0 6px 20px rgba(217, 96, 58, .28); }
+    .btn-white { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+
+    /* Nav */
+    .nav { position: sticky; top: 14px; z-index: 50; display: flex; justify-content: center; padding: 0 16px; margin-top: 18px; }
+    .nav-pill { display: flex; align-items: center; gap: 6px; background: var(--dark); border-radius: 999px; padding: 6px 6px 6px 14px; box-shadow: 0 12px 30px rgba(20, 17, 15, .22); }
+    .nav-logo { width: 26px; height: 26px; margin-right: 10px; flex: none; }
+    .nav-links { display: flex; gap: 2px; }
+    .nav-links a { color: #a9a39c; font-size: 15px; padding: 8px 10px; border-radius: 999px; }
+    .nav-links a:hover, .nav-links a.on { color: #fff; }
+    .nav-cta { background: var(--orange); color: #fff; font-size: 15px; font-weight: 500; padding: 9px 18px; border-radius: 999px; margin-left: 8px; white-space: nowrap; }
+
+    /* Hero */
+    .hero-bg { position: relative; margin-top: -76px; padding-top: 76px; overflow: hidden;
+      background:
+        radial-gradient(600px 380px at 18% 22%, rgba(240, 170, 145, .38), transparent 70%),
+        radial-gradient(520px 360px at 85% 55%, rgba(244, 200, 170, .32), transparent 70%),
+        linear-gradient(180deg, #f9efe9 0%, var(--bg) 100%); }
+    .hero { text-align: center; padding-top: 72px; padding-bottom: 40px; }
+    .seats { display: inline-block; font-family: var(--mono); font-size: 13px; background: #fff; border: 1px solid var(--line); padding: 8px 16px; border-radius: 999px; margin-bottom: 30px; }
+    .hero h1 { font-size: clamp(36px, 6.6vw, 76px); line-height: 1.04; letter-spacing: -0.04em; max-width: 960px; margin: 0 auto 24px; }
+    .hero p { font-size: clamp(17px, 1.6vw, 20px); color: var(--ink-2); max-width: 640px; margin: 0 auto 32px; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .hero-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+    /* Product tabs */
+    .tabs { display: flex; justify-content: center; margin: 36px 0 24px; }
+    .tabs-pill { display: flex; gap: 2px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px; box-shadow: 0 10px 30px rgba(20, 17, 15, .06); overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+    .tabs-pill button { font: inherit; font-size: 16px; color: var(--muted); background: none; border: 0; padding: 9px 17px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+    .tabs-pill button:hover { color: var(--ink); }
+    .tabs-pill button[aria-selected="true"] { background: #f0eeeb; color: var(--ink); font-weight: 500; }
+
+    /* Browser frame */
+    .frame { background: #fff; border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 30px 80px rgba(20, 17, 15, .08); overflow: hidden; position: relative; }
+    .frame-bar { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .frame-bar .w { width: 20px; height: 20px; border-radius: 5px; background: var(--orange); color: #fff; display: grid; place-items: center; font-family: var(--sans); font-weight: 700; font-size: 11px; }
+    .live { margin-left: auto; color: var(--green); }
+    .live::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 6px; vertical-align: middle; }
+    .frame-body { padding: 16px 16px 84px; }
+    .dock { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 4px; background: var(--dark); padding: 5px; border-radius: 999px; box-shadow: 0 8px 24px rgba(20, 17, 15, .25); }
+    .dock button, .dock span { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #2a2622; color: #d8d3cd; font-size: 12px; border: 0; cursor: pointer; font-family: var(--sans); }
+    .dock .on, .dock [aria-selected="true"] { background: var(--orange); color: #fff; }
+    .panel[hidden] { display: none; }
+
+    /* Dashboard */
+    .dash { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
+    .rev-card { background: var(--dark); color: #fff; border-radius: 16px; padding: 22px; }
+    .rev-total { display: flex; align-items: center; gap: 10px; margin: 8px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--dark-line); flex-wrap: wrap; }
+    .rev-total .mono { font-size: 40px; font-weight: 500; letter-spacing: -0.02em; line-height: 1; }
+    .chip { font-family: var(--mono); font-size: 11px; padding: 3px 7px; border-radius: 5px; }
+    .chip-up { background: #e7f3ec; color: var(--green); }
+    .chip-down { background: #fbe9e6; color: #c0392b; }
+    .chip-flat { background: #f0eeeb; color: var(--muted); }
+    .chip-model { background: #fbf1d9; color: #a3741c; }
+    .rev-split { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; font-size: 13px; color: #a9a39c; margin-bottom: 16px; }
+    .rev-split b { color: #fff; font-weight: 400; }
+    .trail-mini { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+    .trail-mini div { border: 1px solid var(--dark-line); background: var(--dark-2); border-radius: 8px; padding: 9px 10px; min-width: 0; }
+    .trail-mini small { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #8f8a84; }
+    .trail-mini b { display: block; font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .trail-mini b.green { color: var(--green-2); }
+    .trail-mini em { font-style: normal; font-size: 11px; color: #8f8a84; }
+    .kpis { display: grid; gap: 14px; }
+    .kpi { border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+    .kpi .v { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 26px; margin: 8px 0 4px; }
+    .kpi p { margin: 0; font-size: 14px; color: var(--muted); }
+
+    /* Calendar */
+    .cal { border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; margin-top: 14px; }
+    .cal-head { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+    .cal-head .dim { letter-spacing: .02em; text-transform: none; }
+    .cal-row { display: grid; grid-template-columns: 110px 1fr 40px; align-items: center; gap: 12px; padding: 3px 0; font-size: 13px; }
+    .cal-name { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .cal-name i { width: 9px; height: 9px; border-radius: 2px; }
+    .cal-cells { display: grid; grid-template-columns: repeat(30, 1fr); gap: 3px; }
+    .cal-cells i, .cal-legend i { height: 14px; border-radius: 3px; display: block; }
+    .d-c { background: var(--green); }
+    .d-n { background: #f9e8e4; }
+    .d-x { background: #ecebe8; }
+    .cal-pct { text-align: right; font-size: 12px; color: var(--ink-2); }
+    .cal-legend { display: flex; gap: 18px; margin-top: 12px; font-size: 13px; color: var(--ink-2); }
+    .cal-legend span { display: flex; align-items: center; gap: 6px; }
+    .cal-legend i { width: 11px; height: 11px; }
+
+    /* Prompts table */
+    .chips { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .chip-f { font-size: 13px; border: 1px solid var(--line); padding: 4px 12px; border-radius: 999px; color: var(--ink-2); }
+    .chip-f.on { border-color: var(--orange); background: var(--orange-tint); color: var(--orange); }
+    .table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; }
+    .ptable { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+    .ptable th { background: #f5f3f0; text-align: left; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; padding: 10px 14px; }
+    .ptable td { padding: 12px 14px; border-top: 1px solid var(--line); }
+    .ptable .eng { font-size: 11px; color: var(--ink-2); }
+    .ptable .rank { font-family: var(--mono); font-size: 16px; font-weight: 500; }
+    .ptable .rank.lost { color: #c0392b; }
+    .ptable .r { text-align: right; }
+    .table-foot { font-size: 11px; color: var(--muted); margin: 10px 0 0; }
+
+    /* Actions board */
+    .board-intro { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+    .board { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 10px; overflow-x: auto; }
+    .col { background: #f3f1ee; border-radius: 12px; padding: 10px; align-self: start; }
+    .col-head { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 8px; }
+    .col-head i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .kcard { background: #fff; border: 1px solid var(--line); border-radius: 9px; padding: 10px; margin-bottom: 8px; }
+    .kmeta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; font-size: 10px; color: var(--ink-2); gap: 4px 6px; }
+    .kmeta span { white-space: nowrap; }
+    .ktag { background: var(--orange-tint); color: var(--orange); padding: 2px 5px; border-radius: 4px; letter-spacing: .06em; }
+    .ktag.grey { background: #efedea; color: var(--muted); }
+    .ktitle { font-size: 13px; margin: 8px 0; line-height: 1.35; }
+    .kbtn { display: inline-block; background: var(--orange); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 6px; }
+    .krec { font-size: 11px; color: var(--green); }
+
+    /* Stat panels (Sources, Accuracy, Competitors, Reports) */
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .stat-grid .kpi .v { font-size: 22px; }
+
+    /* Sections */
+    section { padding: 110px 0; }
+    .section-title { font-size: clamp(34px, 4.4vw, 52px); line-height: 1.06; }
+    .lead { font-size: 18px; color: var(--ink-2); }
+
+    /* How it works */
+    .how { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; align-items: start; }
+    .how-left { position: sticky; top: 110px; }
+    .how-left .lead { margin: 24px 0 36px; }
+    .progress { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 13px; }
+    .progress .cur { color: var(--orange); white-space: nowrap; }
+    .progress .bar { flex: 1; height: 1px; background: var(--line); position: relative; }
+    .progress .bar span { position: absolute; left: 0; top: 0; height: 1px; background: var(--orange); transition: width .3s; }
+    .progress .of { color: var(--muted); }
+    .steps { display: grid; gap: 16px; }
+    .step { display: grid; grid-template-columns: 34px 1fr; gap: 14px; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 22px 22px 24px; transition: background .25s, border-color .25s; }
+    .step.on { background: var(--orange-tint); border-color: #f2b9a4; }
+    .step-n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; background: #f3f1ee; color: var(--muted); }
+    .step.done .step-n, .step.on .step-n { background: var(--orange); color: #fff; }
+    .step h3 { font-size: 19px; letter-spacing: -0.015em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .step h3 .chip { background: #f3f1ee; color: var(--muted); font-weight: 400; }
+    .step p { color: var(--ink-2); margin: 8px 0 16px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pills span { font-size: 14px; border: 1px solid var(--line); background: #fff; padding: 6px 13px; border-radius: 999px; }
+
+    /* Attribution trail */
+    .trail-sec { background: var(--dark); color: #fff; text-align: center; }
+    .trail-sec .section-title { max-width: 760px; margin: 18px auto 20px; }
+    .trail-sec .lead { color: #b6b0a9; max-width: 720px; margin: 0 auto; }
+    .trail { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--dark-line); margin-top: 56px; text-align: left; }
+    .trail > div { padding: 40px 24px 10px; position: relative; }
+    .trail > div + div { border-left: 1px solid var(--dark-line); }
+    .trail > div + div::before { content: "→"; position: absolute; left: -12px; top: 36px; width: 24px; height: 24px; border-radius: 50%; background: var(--orange); color: #fff; font-size: 12px; display: grid; place-items: center; }
+    .trail small { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #a9a39c; }
+    .trail h3 { font-size: 19px; letter-spacing: -0.015em; margin: 14px 0 10px; }
+    .trail p { color: #b6b0a9; font-size: 15px; margin: 0 0 18px; }
+    .trail .m { font-family: var(--mono); font-size: 13px; color: #a9a39c; }
+    .trail .m.green { color: var(--green-2); }
+    .bands { margin-top: 48px; text-align: left; border: 1px solid var(--dark-line); background: var(--dark-2); border-radius: 22px; padding: 24px 26px; }
+    .bands p { margin: 0 0 14px; font-size: 16px; }
+    .bands p::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green-2); margin-right: 12px; vertical-align: middle; }
+    .bands .band-t { color: var(--green-2); font-family: var(--mono); }
+    .bands .band-g { color: #fff; font-family: var(--mono); }
+    .bands .band-m { color: var(--orange-2); font-family: var(--mono); }
+    .bands a { text-decoration: underline; text-underline-offset: 4px; }
+
+    /* The difference */
+    .diff-head { max-width: 780px; margin-bottom: 56px; }
+    .diff-head .lead { margin-top: 20px; }
+    .diff { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .diff-card { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 30px 30px 18px; }
+    .diff-card .top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .diff-card .top .mono-label { color: var(--orange); font-size: 12px; }
+    .only { font-size: 13px; background: var(--orange-tint); color: var(--orange); padding: 3px 10px; border-radius: 999px; }
+    .diff-card h3 { font-size: 26px; letter-spacing: -0.02em; margin: 18px 0 12px; }
+    .diff-card > p { color: var(--ink-2); margin: 0 0 22px; }
+    .rows { border-top: 1px solid var(--line); }
+    .rows div { display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; font-size: 16px; color: var(--ink-2); }
+    .rows .mono { font-size: 14px; }
+    .o { color: var(--orange); }
+    .g { color: var(--green); }
+
+    /* Feature rows */
+    .feat { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; padding: 70px 0; }
+    .feat.flip .feat-media { order: -1; }
+    .feat h2 { font-size: clamp(32px, 3.6vw, 44px); line-height: 1.08; margin-bottom: 20px; }
+    .feat .lead { margin: 0 0 28px; }
+    .ticks { list-style: none; margin: 0; padding: 0; }
+    .ticks li { position: relative; padding-left: 28px; margin-bottom: 12px; font-size: 17px; color: var(--ink-2); }
+    .ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--orange); }
+    .feat-media .frame-body { padding-bottom: 72px; }
+    .feat-media .rev-card .rev-total .mono { font-size: 32px; }
+
+    /* Testimonials */
+    .center-title { text-align: center; margin-bottom: 52px; }
+    .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .quote { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+    .quote blockquote { margin: 0; font-size: 18px; line-height: 1.5; }
+    .who { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--dark); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 600; flex: none; }
+    .who b { display: block; font-weight: 500; }
+    .who span { color: var(--muted); font-size: 15px; }
+
+    /* Pricing */
+    .pricing-head { text-align: center; max-width: 760px; margin: 0 auto 52px; }
+    .pricing-head .lead { margin: 22px 0 0; }
+    .pricing-head .small { color: var(--muted); font-size: 15px; margin-top: 18px; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .tier { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 28px; }
+    .tier.pop { border-color: var(--orange); }
+    .tier h3 { font-size: 21px; letter-spacing: -0.015em; display: flex; align-items: center; gap: 10px; }
+    .tier .badge { font-size: 12px; background: var(--orange); color: #fff; padding: 3px 10px; border-radius: 999px; letter-spacing: 0; }
+    .tier .desc { color: var(--muted); font-size: 15px; min-height: 46px; margin: 12px 0 16px; }
+    .price { font-size: 40px; letter-spacing: -0.03em; font-weight: 500; }
+    .price small { font-size: 16px; color: var(--muted); font-weight: 400; }
+    .tier .btn { width: 100%; justify-content: center; margin: 16px 0 20px; font-size: 17px; padding: 13px; }
+    .tier ul { border-top: 1px solid var(--line); padding-top: 20px; }
+    .tier .ticks li { font-size: 16px; }
+    .pricing-foot { text-align: center; color: var(--muted); margin-top: 32px; font-size: 15px; }
+    .pricing-foot a { color: var(--ink); }
+
+    /* FAQ */
+    .faq { max-width: 790px; margin: 0 auto; background: #fff; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+    .faq details + details { border-top: 1px solid var(--line); }
+    .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; padding: 20px 24px; font-size: 17px; font-weight: 500; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "▼"; font-size: 12px; color: var(--muted); }
+    .faq details[open] summary::after { content: "▲"; }
+    .faq details p { margin: -6px 24px 22px; color: var(--ink-2); font-size: 15px; }
+
+    /* CTA + footer */
+    .final { text-align: center; padding-bottom: 130px; }
+    .final .lead { margin: 18px 0 32px; }
+    footer { border-top: 1px solid var(--line); padding: 64px 0 28px; }
+    .fcols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .fcols h4 { font-family: var(--sans); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0 0 18px; }
+    .fcols a { display: block; margin-bottom: 12px; font-size: 16px; color: var(--ink-2); }
+    .fcols a:hover { color: var(--ink); }
+    .wordmark { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 80px 0 24px; }
+    .wordmark span { font-size: clamp(72px, 15vw, 210px); font-weight: 700; letter-spacing: -0.06em; line-height: .9; color: #0f1b1f; }
+    .wordmark svg { width: clamp(70px, 10vw, 140px); height: auto; flex: none; }
+    .fbottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; color: var(--muted); }
+    .fbottom .ok::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #3aa35b; margin: 0 6px 0 14px; vertical-align: middle; }
+    .fbottom a + span { margin-left: 20px; }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .dash, .how, .feat, .diff { grid-template-columns: 1fr; }
+      .how { gap: 36px; }
+      .how-left { position: static; }
+      .feat { gap: 36px; padding: 48px 0; }
+      .feat.flip .feat-media { order: 0; }
+      .trail { grid-template-columns: 1fr; }
+      .trail > div + div { border-left: 0; border-top: 1px solid var(--dark-line); }
+      .trail > div + div::before { left: 24px; top: -12px; content: "↓"; }
+      .quotes, .tiers { grid-template-columns: 1fr; }
+      .fcols { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      section { padding: 72px 0; }
+      .hero { padding-top: 56px; }
+      .trail-mini { grid-template-columns: repeat(2, 1fr); }
+      .stat-grid { grid-template-columns: 1fr; }
+      .cal-row { grid-template-columns: 78px 1fr 32px; gap: 8px; font-size: 11px; }
+      .cal-cells { gap: 2px; }
+      .cal-cells i { height: 12px; border-radius: 2px; }
+      .cal-head { flex-direction: column; gap: 2px; }
+      .board { grid-template-columns: repeat(4, 160px); }
+      .rev-total .mono { font-size: 32px; }
+      .frame-body { padding: 12px 12px 72px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Main">
+    <div class="nav-pill">
+      <svg class="nav-logo" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#ee7d3a"/><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="4.5" fill="#fff"/></svg>
+      <div class="nav-links">
+        <a class="on" href="#product">Product</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://woop1.com/blog">Blog</a>
+        <a href="https://woop1.com/docs">Docs</a>
+        <a href="https://woop1.com/">Sign in</a>
+      </div>
+      <a class="nav-cta" href="#pricing">Start tracking</a>
+    </div>
+  </nav>
+
+  <div class="hero-bg">
+    <header class="hero wrap">
+      <span class="seats">7 of 10 founding seats left — locked for life</span>
+      <h1>Woop watches the prompts that make you money.</h1>
+      <p>Prompt monitoring tells you that you were mentioned. Revenue attribution tells you money arrived. Woop holds both ends — it schedules checks by what a prompt earns, and proves a fix worked.</p>
+      <div class="hero-btns">
+        <a class="btn btn-orange" href="#pricing">Start 14 day free trial</a>
+        <a class="btn btn-white" href="#product">▶ See demo</a>
+      </div>
+      <div class="hero-note">No credit card required · 16 months of history on day one</div>
+    </header>
+
+    <div class="wrap" id="product">
+      <div class="tabs">
+        <div class="tabs-pill" role="tablist" aria-label="Product views">
+          {%- for t in page.tabs %}
+          <button role="tab" id="tab-{{ t.id }}" data-tab="{{ t.id }}" aria-controls="panel-{{ t.id }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ t.label }}</button>
+          {%- endfor %}
+        </div>
+      </div>
+
+      <div class="frame" id="product-frame">
+        <div class="frame-bar"><span class="w">W</span><span id="frame-url">woop1.com/revenue</span><span class="live">live</span></div>
+        <div class="frame-body">
+          <div class="panel" id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
+            <div class="dash">
+              {{ revenue_card }}
+              <div class="kpis">
+                <div class="kpi"><div class="mono-label">AI visibility</div><div class="v">34/100 <span class="chip chip-up">▲ 3</span></div><p>6 engines · ±4</p></div>
+                <div class="kpi"><div class="mono-label">Prompts you're losing</div><div class="v">5 of 23 <span class="chip chip-flat">– 0</span></div><p>competitor cited</p></div>
+                <div class="kpi"><div class="mono-label">Revenue at risk</div><div class="v">$8,900 <span class="chip chip-down">▼ 3 lost</span></div><p>from 3 lost prompts</p></div>
+              </div>
+            </div>
+            {{ calendar }}
+          </div>
+
+          <div class="panel" id="panel-prompts" role="tabpanel" aria-labelledby="tab-prompts" hidden>{{ prompts_panel }}</div>
+
+          <div class="panel" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources" hidden>
+            <div class="stat-grid">
+              <div class="kpi"><div class="mono-label">Top citation</div><div class="v">g2.com/compare</div><p>position 1 · quoted instead of your own site</p></div>
+              <div class="kpi"><div class="mono-label">Sources citing you</div><div class="v">14</div><p>on the top path</p></div>
+              <div class="kpi"><div class="mono-label">Top landing page</div><div class="v">/pricing</div><p>1,240 sessions</p></div>
+              <div class="kpi"><div class="mono-label">Landing conversion</div><div class="v">4.1%</div><p>where that citation sent them</p></div>
+            </div>
+          </div>
+
+          <div class="panel" id="panel-accuracy" role="tabpanel" aria-labelledby="tab-accuracy" hidden>
+            <div class="stat-grid">
+              <div class="kpi"><div class="mono-label">Forecast accuracy</div><div class="v">91%</div><p>published in the app</p></div>
+              <div class="kpi"><div class="mono-label">Median days to verify</div><div class="v">11 days</div><p>from ship to verified</p></div>
+              <div class="kpi"><div class="mono-label">Recovered, last 90d</div><div class="v">$17,920</div><p>from verified fixes</p></div>
+              <div class="kpi"><div class="mono-label">Modelled revenue cap</div><div class="v">40%</div><p>of any total</p></div>
+            </div>
+          </div>
+
+          <div class="panel" id="panel-actions" role="tabpanel" aria-labelledby="tab-actions" hidden>{{ actions_panel }}</div>
+
+          <div class="panel" id="panel-competitors" role="tabpanel" aria-labelledby="tab-competitors" hidden>
+            <div class="stat-grid">
+              <div class="kpi"><div class="mono-label">Prompts you're losing</div><div class="v">5 of 23</div><p>competitor cited</p></div>
+              <div class="kpi"><div class="mono-label">Most cited rival</div><div class="v">Zety</div><p>on 2 of the top 6 prompts</p></div>
+              <div class="kpi"><div class="mono-label">Other rivals</div><div class="v">Canva · Rezi</div><p>and Novoresume</p></div>
+              <div class="kpi"><div class="mono-label">Revenue at risk</div><div class="v">$8,900</div><p>from 3 lost prompts</p></div>
+            </div>
+          </div>
+
+          <div class="panel" id="panel-reports" role="tabpanel" aria-labelledby="tab-reports" hidden>
+            <div class="stat-grid">
+              <div class="kpi"><div class="mono-label">AI-attributed revenue</div><div class="v">$58,400</div><p>last 30 days · ▲ 22%</p></div>
+              <div class="kpi"><div class="mono-label">Directly tracked</div><div class="v">$43,000</div><p>matched to real payments</p></div>
+              <div class="kpi"><div class="mono-label">Modelled</div><div class="v">$15,400</div><p>reported as its own band</p></div>
+              <div class="kpi"><div class="mono-label">History</div><div class="v">16 months</div><p>backfilled on day one</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="dock" aria-label="Product views">
+          {%- for t in page.tabs %}
+          <button data-tab="{{ t.id }}" aria-label="{{ t.label }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ t.icon }}</button>
+          {%- endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="how-it-works">
+    <div class="wrap how">
+      <div class="how-left">
+        <div class="eyebrow">How it works</div>
+        <h2 class="section-title">Three connections.<br>Then it runs itself.</h2>
+        <p class="lead">Read-only OAuth, nothing to install on your site unless you want dark-traffic recovery. Sixteen months of history is backfilled on day one, so your first report covers last year rather than starting empty.</p>
+        <div class="progress"><span class="cur" id="step-label">Step 1 — 2 min</span><span class="bar"><span id="step-bar" style="width:25%"></span></span><span class="of" id="step-count">1 / 4</span></div>
+      </div>
+      <div class="steps">
+        <div class="step on" data-label="Step 1 — 2 min">
+          <span class="step-n">1</span>
+          <div>
+            <h3>Connect what you already have <span class="chip">2 min</span></h3>
+            <p>Search Console for the pages AI-referred visitors land on, your payment provider for what they pay you. Read-only OAuth on both — we cannot write to either.</p>
+            <div class="pills"><span>Search Console</span><span>Stripe · Dodo · Paddle · Razorpay</span><span>Bing Webmaster</span></div>
+          </div>
+        </div>
+        <div class="step" data-label="Step 2 — 3 min">
+          <span class="step-n">2</span>
+          <div>
+            <h3>Confirm the prompt set <span class="chip">3 min</span></h3>
+            <p>We read your site and propose the topics and prompts a buyer would actually type. Rename, remove, add your own — you decide what consumes your allowance.</p>
+            <div class="pills"><span>Generated from your pages</span><span>Editable</span><span>Revenue-ranked</span></div>
+          </div>
+        </div>
+        <div class="step" data-label="Step 3 — automatic">
+          <span class="step-n">3</span>
+          <div>
+            <h3>Woop watches, then schedules by revenue <span class="chip">automatic</span></h3>
+            <p>All six engines, every day. Prompts that earn get sampled more often; stable and worthless ones drift back and release their budget to the earners.</p>
+            <div class="pills"><span>6 engines</span><span>Revenue-weighted</span><span>16-month backfill</span></div>
+          </div>
+        </div>
+        <div class="step" data-label="Step 4 — the loop">
+          <span class="step-n">4</span>
+          <div>
+            <h3>Fixes stay open until an engine repeats them <span class="chip">the loop</span></h3>
+            <p>Every gap becomes a card carrying what it should recover. Ship it, and Woop re-checks the affected prompts and reports the revenue that actually came back.</p>
+            <div class="pills"><span>Verified-fix attribution</span><span>Forecast accuracy published</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trail-sec" id="attribution">
+    <div class="wrap">
+      <div class="mono-label accent">The attribution trail</div>
+      <h2 class="section-title">A payment lands. Woop walks it backwards.</h2>
+      <p class="lead">Every other tool starts at the citation and stops. This is the chain that lets us price a prompt — and the reason we can schedule checks by what they earn.</p>
+      <div class="trail">
+        <div><small>01 · Prompt</small><h3>"best video cv tools"</h3><p>One of 150 tracked questions a buyer actually types.</p><span class="m">1,820 sessions</span></div>
+        <div><small>02 · Engine</small><h3>ChatGPT</h3><p>Cited you second, on 22 of the last 30 days.</p><span class="m">rank #2 ±1</span></div>
+        <div><small>03 · Citation</small><h3>g2.com/compare</h3><p>The engine quoted your G2 page, not your own site.</p><span class="m">position 1</span></div>
+        <div><small>04 · Landing</small><h3>/pricing</h3><p>Where that citation sent them, converting at 4.1%.</p><span class="m">1,240 sessions</span></div>
+        <div><small>05 · Payment</small><h3>$6,700</h3><p>Three Stripe payments, matched in a 30-day window.</p><span class="m green">directly tracked</span></div>
+      </div>
+      <div class="bands">
+        <p>Three confidence bands, never merged into one number: <span class="band-t">directly tracked</span>, <span class="band-g">tag-recovered</span>, <span class="band-m">modelled</span> — capped at 40% of any total.</p>
+        <a href="#faq">Read the methodology →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="difference">
+    <div class="wrap">
+        <div class="diff-head">
+          <div class="eyebrow">The difference</div>
+          <h2 class="section-title">Two rows nobody else can tick.</h2>
+          <p class="lead">We checked every published pricing page in the category in August 2026. These are the only two capabilities where the comparison table has exactly one mark in it — and both of them need the whole chain above to exist.</p>
+        </div>
+        <div class="diff">
+          <div class="diff-card">
+            <div class="top"><span class="mono-label">Revenue-weighted scheduling</span><span class="only">only Woop</span></div>
+            <h3>Checks go where the money is.</h3>
+            <p>Every other tool checks every prompt on the same clock, which spends most of your allowance on prompts that never move money. Woop knows what each prompt earned, so it re-samples the earners more often.</p>
+            <div class="rows">
+              <div><span>Prompt earning $4,000/mo</span><span class="mono o">3× daily</span></div>
+              <div><span>Stable prompt at $0</span><span class="mono dim">weekly</span></div>
+              <div><span>Allowance freed for earners</span><span class="mono g">+38%</span></div>
+            </div>
+          </div>
+          <div class="diff-card">
+            <div class="top"><span class="mono-label">Verified-fix attribution</span><span class="only">only Woop</span></div>
+            <h3>A fix isn't done until the engine says so.</h3>
+            <p>Shipping is not the same as the engines repeating it. Woop holds the before, re-checks after, and reports the revenue that actually returned next to the estimate it gave you.</p>
+            <div class="rows">
+              <div><span>Median days to verify</span><span class="mono">11 days</span></div>
+              <div><span>Our forecast accuracy</span><span class="mono g">91%</span></div>
+              <div><span>Recovered, last 90d</span><span class="mono g">$17,920</span></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <div class="wrap" id="features">
+    <div class="feat">
+      <div>
+        <div class="eyebrow">Revenue</div>
+        <h2>See what AI search actually earned you</h2>
+        <p class="lead">Directly tracked, tag-recovered, and modelled — three figures, never merged into one number you cannot defend in a spend review.</p>
+        <ul class="ticks">
+          <li>$43,000 tracked to real payments</li>
+          <li>$15,400 recovered from referrer-less visits</li>
+          <li>Modelled revenue capped at 40% of any total</li>
+        </ul>
+      </div>
+      <div class="feat-media">
+        <div class="frame">
+          <div class="frame-bar"><span class="w">W</span>woop1.com/revenue<span class="live">live</span></div>
+          <div class="frame-body">{{ revenue_card }}{{ calendar }}</div>
+          <div class="dock" aria-hidden="true">{% for t in page.tabs %}<span{% if t.id == 'dashboard' %} class="on"{% endif %}>{{ t.icon }}</span>{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat flip">
+      <div>
+        <div class="eyebrow">Prompts</div>
+        <h2>Checks go where the money is</h2>
+        <p class="lead">Every other tool checks every prompt on the same clock. Woop knows what each prompt earned, so it re-samples the earners more often and lets the dead ones drift.</p>
+        <ul class="ticks">
+          <li>150 prompts, all 6 engines daily</li>
+          <li>A $4,000/mo prompt is checked several times a day</li>
+          <li>A stable, worthless prompt drops to weekly</li>
+          <li>Same allowance, more resolution where it matters</li>
+        </ul>
+      </div>
+      <div class="feat-media">
+        <div class="frame">
+          <div class="frame-bar"><span class="w">W</span>woop1.com/prompts<span class="live">live</span></div>
+          <div class="frame-body">{{ prompts_panel }}</div>
+          <div class="dock" aria-hidden="true">{% for t in page.tabs %}<span{% if t.id == 'prompts' %} class="on"{% endif %}>{{ t.icon }}</span>{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="eyebrow">Actions</div>
+        <h2>A fix is not done until the engine repeats it</h2>
+        <p class="lead">Ship a fix and Woop holds the before, re-checks the affected prompts, and reports the revenue that actually came back — next to the estimate it gave you.</p>
+        <ul class="ticks">
+          <li>Verified means an engine changed its answer</li>
+          <li>91% forecast accuracy, published in the app</li>
+          <li>Median 11 days from ship to verified</li>
+        </ul>
+      </div>
+      <div class="feat-media">
+        <div class="frame">
+          <div class="frame-bar"><span class="w">W</span>woop1.com/actions<span class="live">live</span></div>
+          <div class="frame-body">{{ actions_panel }}</div>
+          <div class="dock" aria-hidden="true">{% for t in page.tabs %}<span{% if t.id == 'actions' %} class="on"{% endif %}>{{ t.icon }}</span>{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat flip">
+      <div>
+        <div class="eyebrow">Data</div>
+        <h2>Sixteen months of history. Your data, anywhere.</h2>
+        <p class="lead">Your first report covers last year instead of starting empty. Then pull every prompt, citation and payment match into your own stack — or straight into your AI agents.</p>
+        <ul class="ticks">
+          <li>16-month backfill on day one</li>
+          <li>API for dashboards and pipelines</li>
+          <li>MCP server for AI assistants and agents</li>
+        </ul>
+      </div>
+      <div class="feat-media">
+        <div class="frame">
+          <div class="frame-bar"><span class="w">W</span>woop1.com/reports<span class="live">live</span></div>
+          <div class="frame-body">
+            <div class="stat-grid">
+              <div class="kpi"><div class="mono-label">History</div><div class="v">16 months</div><p>backfilled on day one</p></div>
+              <div class="kpi"><div class="mono-label">Engines</div><div class="v">6</div><p>checked daily</p></div>
+              <div class="kpi"><div class="mono-label">Access</div><div class="v">API</div><p>for dashboards and pipelines</p></div>
+              <div class="kpi"><div class="mono-label">Agents</div><div class="v">MCP</div><p>for AI assistants</p></div>
+            </div>
+          </div>
+          <div class="dock" aria-hidden="true">{% for t in page.tabs %}<span{% if t.id == 'reports' %} class="on"{% endif %}>{{ t.icon }}</span>{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="customers">
+    <div class="wrap">
+      <h2 class="section-title center-title">Teams who can point at the revenue</h2>
+      <div class="quotes">
+        <figure class="quote" style="margin:0"><blockquote>"Woop turned our SEO from a guessing game into a roadmap. We ship content that actually ranks — in a fraction of the time."</blockquote><figcaption class="who"><span class="avatar">LG</span><span><b>Ludovic Granger</b><span>CEO, Leadbay.ai</span></span></figcaption></figure>
+        <figure class="quote" style="margin:0"><blockquote>"The first SEO tool that reads our product before it answers. We stopped re-explaining our business to AI."</blockquote><figcaption class="who"><span class="avatar">HA</span><span><b>Humberto Ayres</b><span>CEO, Rows.com</span></span></figcaption></figure>
+        <figure class="quote" style="margin:0"><blockquote>"We replaced three tools with Woop in a single week. The competitor gap matrix alone unlocked a quarter of content ideas."</blockquote><figcaption class="who"><span class="avatar">SS</span><span><b>Stepan Solodnev</b><span>COO, Remy AI</span></span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" style="padding-top:20px">
+    <div class="wrap">
+      <div class="pricing-head">
+        <h2 class="section-title">Three tiers. Annual saves 20%.</h2>
+        <p class="lead">No free plan, because engine monitoring genuinely costs us money and we would rather charge for it than pretend otherwise. Every plan gets all six engines, unlimited seats and unlimited revenue attribution.</p>
+        <p class="lead">Go over your prompt allowance and nothing breaks — we bill the overage at <span class="mono">$0.008</span> per prompt-engine-check, in arrears. If upgrading would be cheaper than the overage, the app says so instead of letting the bill run.</p>
+        <p class="small">14 day trial on every tier. No credit card. Cancel in two clicks and keep your data and exports. The first ten customers lock their rate for life.</p>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Starter</h3>
+          <p class="desc">One brand, daily ChatGPT, six months of history.</p>
+          <div class="price">$79 <small>/mo</small></div>
+          <a class="btn btn-white" href="#pricing">Start 14 day free trial</a>
+          <ul class="ticks"><li>50 tracked prompts</li><li>ChatGPT daily · others every 2 days</li><li>Revenue attribution + Woop tag</li><li>5 competitors · 10 briefs/mo</li></ul>
+        </div>
+        <div class="tier pop">
+          <h3>Growth <span class="badge">Popular</span></h3>
+          <p class="desc">Everything daily, and proof your fixes paid.</p>
+          <div class="price">$199 <small>/mo</small></div>
+          <a class="btn btn-orange" href="#pricing">Start 14 day free trial</a>
+          <ul class="ticks"><li>150 prompts, all 6 engines daily</li><li>Revenue-weighted scheduling</li><li>Verified-fix attribution</li><li>16-month backfill · API + MCP</li></ul>
+        </div>
+        <div class="tier">
+          <h3>Agency</h3>
+          <p class="desc">Three client projects with white-label reporting.</p>
+          <div class="price">$399 <small>/mo</small></div>
+          <a class="btn btn-white" href="#pricing">Start 14 day free trial</a>
+          <ul class="ticks"><li>225 prompts · 3 projects</li><li>White-label reports</li><li>Unlimited client share links</li><li>Shared Slack channel</li></ul>
+        </div>
+      </div>
+      <p class="pricing-foot">Extra Agency project $99/mo · <a href="https://woop1.com/">full comparison and the unit-price maths →</a></p>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:20px">
+    <div class="wrap">
+      <h2 class="section-title center-title">FAQ</h2>
+      <div class="faq">
+        <details open><summary>What counts as a prompt?</summary><p>One question you want tracked. Checking it on six engines uses six checks — usage shows live in the dashboard.</p></details>
+        <details><summary>What is revenue-weighted scheduling?</summary><p>Woop knows what each prompt earned, so it re-samples the earners more often. A $4,000/mo prompt is checked several times a day, while a stable prompt at $0 drops to weekly — same allowance, more resolution where it matters.</p></details>
+        <details><summary>How accurate is the revenue number?</summary><p>Revenue is reported in three confidence bands that are never merged into one number: directly tracked, tag-recovered and modelled. Modelled revenue is capped at 40% of any total, and our 91% forecast accuracy is published in the app.</p></details>
+        <details><summary>What if I go over my prompts?</summary><p>Nothing breaks. We bill the overage at $0.008 per prompt-engine-check, in arrears. If upgrading would be cheaper than the overage, the app says so instead of letting the bill run.</p></details>
+        <details><summary>Do I need to install anything?</summary><p>No. Woop connects with read-only OAuth to Search Console and your payment provider. Nothing is installed on your site unless you want dark-traffic recovery.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2 class="section-title">Start with the prompts that already earn</h2>
+      <p class="lead">Connect Search Console and your payment provider in two minutes.</p>
+      <div class="hero-btns">
+        <a class="btn btn-orange" href="#pricing">Start 14 day free trial</a>
+        <a class="btn btn-white" href="#product">▶ See demo</a>
+      </div>
+      <div class="hero-note">No credit card required</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="fcols">
+        <div><h4>Product</h4><a href="#product">Revenue Ledger</a><a href="#features">Prompts</a><a href="#difference">Accuracy</a><a href="#features">Actions</a><a href="#pricing">Pricing</a><a href="#pricing">Early access</a></div>
+        <div><h4>Company</h4><a href="https://woop1.com/">About</a><a href="https://woop1.com/blog">Blog</a><a href="https://woop1.com/">Careers</a><a href="mailto:hello@woop1.com">Contact</a></div>
+        <div><h4>Resources</h4><a href="#attribution">Methodology</a><a href="https://woop1.com/docs">Docs</a><a href="https://woop1.com/docs">API</a><a href="https://woop1.com/llms.txt">Feeds &amp; llms.txt</a><a href="https://woop1.com/">Status</a></div>
+        <div><h4>Legal</h4><a href="https://woop1.com/">Privacy</a><a href="https://woop1.com/">Terms</a><a href="https://woop1.com/">DPA</a><a href="https://woop1.com/">Security</a></div>
+      </div>
+      <div class="wordmark">
+        <span>Woop AI</span>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#ee7d3a"/><circle cx="20" cy="20" r="11" fill="none" stroke="#fff" stroke-width="3"/><circle cx="20" cy="20" r="4.5" fill="#fff"/></svg>
+      </div>
+      <div class="fbottom">
+        <span>&copy; 2026 Woop Analytics Pvt Ltd.<span class="ok">All systems operational</span></span>
+        <span><a href="mailto:hello@woop1.com">hello@woop1.com</a><span>Made in SF</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // Product tabs: the tab bar and the dock both switch the frame's panel.
+      var tabs = {{ page.tabs | jsonify }};
+      var controls = document.querySelectorAll('#product [data-tab]');
+      var url = document.getElementById('frame-url');
+      function select(id) {
+        tabs.forEach(function (t) {
+          document.getElementById('panel-' + t.id).hidden = t.id !== id;
+          if (t.id === id) url.textContent = t.url;
+        });
+        controls.forEach(function (c) { c.setAttribute('aria-selected', c.dataset.tab === id ? 'true' : 'false'); });
+      }
+      controls.forEach(function (c) { c.addEventListener('click', function () { select(c.dataset.tab); }); });
+
+      // How it works: highlight the step nearest the middle of the viewport.
+      var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+      var label = document.getElementById('step-label');
+      var count = document.getElementById('step-count');
+      var bar = document.getElementById('step-bar');
+      function activate(i) {
+        steps.forEach(function (s, j) { s.classList.toggle('on', j === i); s.classList.toggle('done', j < i); });
+        label.textContent = steps[i].dataset.label;
+        count.textContent = (i + 1) + ' / ' + steps.length;
+        bar.style.width = ((i + 1) / steps.length * 100) + '%';
+      }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) activate(steps.indexOf(e.target)); });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        steps.forEach(function (s) { io.observe(s); });
+      }
+    })();
+  </script>
+</body>
+</html>
